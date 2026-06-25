@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { getCookie } from "cookies-next";
 import { verifyToken } from "@/hooks/useAuth";
 import type { User, Transaction } from "@/models/transaction";
@@ -18,7 +18,7 @@ import { Download, LogOut } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
-export default function DashboardPage() {
+function DashboardContent() {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null);
@@ -244,5 +244,19 @@ export default function DashboardPage() {
 
       <Toast />
     </div>
+  );
+}
+
+export default function DashboardPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center">
+          <p className="text-[#606C5A]">Memuat...</p>
+        </div>
+      }
+    >
+      <DashboardContent />
+    </Suspense>
   );
 }
